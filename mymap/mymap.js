@@ -3,7 +3,8 @@ var map = L.map('map').setView([3.8796405, 11.5455742], 10);
 window.onload = function(){
     var OpenStreetMap_Roberto = L.tileLayer('https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=VXAVDHEIPlijWtnWMbpC', {
         maxZoom: 30,
-        minZoom: 6,
+        minZoom: 1,
+        // minZoom: 6,
         attribution: '&copy; OpenStreetMap France | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         name:"tile"// permettra de ne pas supprimer la couche;
         }).addTo(map);  
@@ -42,6 +43,10 @@ window.onload = function(){
             })
         })
 
+
+
+
+
         bouton2.addEventListener('click', ()=>{
             // depart= document.getElementById("ville_depart");
             // arrive= document.getElementById("ville_depart");
@@ -74,16 +79,30 @@ window.onload = function(){
         function setResultList1(parsedResult1) {
             result_elmt.innerHTML = "";
             console.log(parsedResult1);
-            
-            
-            for (let i = 0; i < parsedResult1.length; i++) {
-                var marker = L.marker([parsedResult1[i].lat, parsedResult1[i].lon]).addTo(map);
+
+
+            // debut: ici on centre la carte et le marker sur la recherche de l'utilisateur. 
+            let ville = [51,-0.09]
+            console.log(ville);
+            map.panTo(ville);
+            // fin
+
+
+
+            var marker = L.marker([parsedResult1[0].lat, parsedResult1[0].lon]).addTo(map);
                 var popup = L.popup()
-                .setLatLng([parsedResult1[i].lat+2, parsedResult1[i].lon])
-                .setContent(parsedResult1[i].address.state)
+                .setLatLng([parsedResult1[0].lat+2, parsedResult1[0].lon])
+                .setContent(parsedResult1[0].address.state)
                 .openOn(map);
 
-            }
+            // for (let i = 0; i < parsedResult1.length; i++) {
+            //     var marker = L.marker([parsedResult1[i].lat, parsedResult1[i].lon]).addTo(map);
+            //     var popup = L.popup()
+            //     .setLatLng([parsedResult1[i].lat+2, parsedResult1[i].lon])
+            //     .setContent(parsedResult1[i].address.state)
+            //     .openOn(map);
+
+            // }
         }
 
 
@@ -95,12 +114,45 @@ window.onload = function(){
 
         function setResultList(parsedResult) {
             result_elmt.innerHTML = "";
-            
+
+
+            var greenIcon = L.icon({
+                iconUrl: 'images/png.webp',
+                iconSize:     [20, 30], // size of the icon
+                shadowSize:   [50, 64], // size of the shadow
+                iconAnchor:   [parsedResult[0].lat, parsedResult[0].lon+0.5], // point of the icon which will correspond to marker's location
+                shadowAnchor: [4, 62],  // the same for the shadow
+                popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+            });
+            L.marker([parsedResult[0].lat, parsedResult[0].lon], {icon: greenIcon}).addTo(map);
+
+
+
+            //debut :ici on redefinit l'icone pour identifier notre ville recherche
+            // var greenIcon = L.icon({
+            //     iconUrl: 'images/location_map_pin_mark_icon_148685.png',
+            //     iconSize:     [50, 70], // size of the icon
+            //     shadowSize:   [20, 30], // size of the shadow
+            //     iconAnchor:   [0, 2], // point of the icon which will correspond to marker's location
+            //     // shadowAnchor: [4, 62],  // the same for the shadow
+            //     // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+            // });
+            // L.marker([parsedResult[0].lat, parsedResult[0].lon], {icon: greenIcon}).addTo(map);
+            // L.marker([parsedResult[0].lat, parsedResult[0].lon], {icon: greenIcon}).addTo(map).bindPopup(parsedResult[0].name);
+            // fin
+
+
+
             for (let i = 0; i < parsedResult.length; i++) {
                 var liElement = document.createElement('li');
                 liElement.textContent = "name : "+parsedResult[i].display_name + "\nlat :"+ parsedResult[i].lat + "lon:"+ parsedResult[i].lon;
                 result_elmt.appendChild(liElement);
                 var marker = L.marker([parsedResult[i].lat, parsedResult[i].lon]).addTo(map);
+
+                // debut : ici on ajoute le nom de la ville sur le marker lors de la recherche 
+                var marker = L.marker([parsedResult[i].lat, parsedResult[i].lon]).addTo(map);
+                marker.bindPopup(parsedResult[i].name)
+                // fin 
             }
             for (const marker of currentMarkers) {
                 map.removeLayer(marker);
@@ -243,8 +295,8 @@ window.onload = function(){
 // maxZoom: 20
 // }).addTo(map);
 
-// var marker = L.marker([51.5, -0.09]).addTo(map);
-// marker.bindPopup("<P>roberto</p>")
+var marker = L.marker([51.5, -0.09]).addTo(map);
+marker.bindPopup("<P>roberto</p>")
 
 
 
