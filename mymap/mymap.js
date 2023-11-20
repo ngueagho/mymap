@@ -3,7 +3,7 @@ var map = L.map('map').setView([3.8796405, 11.5455742], 10);
 window.onload = function(){
     var OpenStreetMap_Roberto = L.tileLayer('https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=VXAVDHEIPlijWtnWMbpC', {
         maxZoom: 30,
-        minZoom: 1,
+        minZoom: 10,
         // minZoom: 6,
         attribution: '&copy; OpenStreetMap France | &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         name:"tile"// permettra de ne pas supprimer la couche;
@@ -114,8 +114,6 @@ window.onload = function(){
 
         function setResultList(parsedResult) {
             result_elmt.innerHTML = "";
-
-
             var greenIcon = L.icon({
                 iconUrl: 'images/png.webp',
                 iconSize:     [20, 30], // size of the icon
